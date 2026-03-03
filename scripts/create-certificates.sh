@@ -1,14 +1,32 @@
-#!/usr/bin/env bash
-set -e
+cd /Users/tal.kohavy/Desktop/dailyUse/1_GitHub_Projects/frontend-nginx/certs
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CERT_DIR="${SCRIPT_DIR}/../certs"
+# 1. Create CA key + self-signed CA cert
+openssl genrsa -out ca.key 2048
+openssl req -new -x509 -days 825 -key ca.key \
+	-subj "/CN=MyCA" \
+	-out ca.crt
 
-mkdir -p "$CERT_DIR"
+# 2. Create server key + CSR
+openssl genrsa -out privkey.pem 2048
+openssl req -new -key privkey.pem \
+	-subj "/CN=luckylove.co.il" \
+	-out server.csr
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-	-keyout "${CERT_DIR}/privkey.pem" \
-	-out "${CERT_DIR}/fullchain.pem" \
-	-subj "/CN=localhost"
+# 3. Create an ext file with the SAN — this is the critical part
+cat >san.ext <<EOF
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage=digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth
+subjectAltName=DNS:luckylove.co.il
+EOF
 
-echo "Created ${CERT_DIR}/fullchain.pem and ${CERT_DIR}/privkey.pem (valid 365 days, for localhost)"
+# 4. Sign the cert with the CA, including the SAN extension
+openssl x509 -req -days 825 \
+	-in server.csr \
+	-CA ca.crt -CAkey ca.key -CAcreateserial \
+	-extfile san.ext \
+	-out fullchain.pem
+
+# 5. Clean up temp files
+rm server.csr san.ext ca.srl

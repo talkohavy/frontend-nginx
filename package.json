@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "build": "docker build . -f Dockerfile -t frontend-nginx:123 -t frontend-nginx:latest",
-    "dev": "docker run -it --rm --name frontend-nginx -p 80:80 -p 443:443 -v \"$(pwd)/certs:/etc/nginx/ssl:ro\" frontend-nginx"
+    "dev": "docker run -it --rm --name frontend-nginx -p 80:80 -p 443:443 -v \"$(pwd)/certs:/etc/nginx/ssl:ro\" frontend-nginx",
+    "create-certificates": "sh scripts/create-certificates.sh"
   },
   "keywords": ["nginx", "static-files", "spa", "frontend", "docker"],
   "author": "LuckyLove Team",
