@@ -1,0 +1,17 @@
+{
+  "name": "frontend-nginx",
+  "version": "1.0.0",
+  "description": "Production-grade NGINX server for serving static frontend files",
+  "private": true,
+  "scripts": {
+    "start": "nginx -g 'daemon off;'",
+    "dev": "nginx -g 'daemon off;'",
+    "docker:run:dev": "docker run -p 3000:80 -e API_URL=http://localhost:8000/api talkohavy/frontend-nginx"
+  },
+  "keywords": ["nginx", "static-files", "spa", "frontend", "docker"],
+  "author": "LuckyLove Team",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.8.1"
+  }
+}
