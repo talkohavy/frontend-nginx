@@ -4,9 +4,8 @@
   "description": "Production-grade NGINX server for serving static frontend files",
   "private": true,
   "scripts": {
-    "start": "nginx -g 'daemon off;'",
-    "dev": "nginx -g 'daemon off;'",
-    "docker:run:dev": "docker run -p 3000:80 -e API_URL=http://localhost:8000/api talkohavy/frontend-nginx"
+    "build": "docker build . -f Dockerfile -t frontend-nginx:123 -t frontend-nginx:latest",
+    "dev": "docker run -p 80:80 -p 443:443 -v \"$(pwd)/certificates:/etc/nginx/ssl:ro\" frontend-nginx"
   },
   "keywords": ["nginx", "static-files", "spa", "frontend", "docker"],
   "author": "LuckyLove Team",
