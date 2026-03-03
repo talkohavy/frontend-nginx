@@ -30,7 +30,7 @@ docker run -p 80:80 frontend-nginx
 **With HTTPS (see section 3 first to create certificates):**
 
 ```bash
-docker run -p 80:80 -p 443:443 -v "$(pwd)/certificates:/etc/nginx/ssl:ro" frontend-nginx
+docker run -p 80:80 -p 443:443 -v "$(pwd)/certs:/etc/nginx/ssl:ro" frontend-nginx
 ```
 
 - **HTTP:** open [http://localhost](http://localhost)
@@ -72,22 +72,22 @@ From the project root, run:
 ./scripts/create-certificates.sh
 ```
 
-This creates **`certificates/fullchain.pem`** and **`certificates/privkey.pem`** (self-signed, good for local/dev).  
+This creates **`certs/fullchain.pem`** and **`certs/privkey.pem`** (self-signed, good for local/dev).  
 Then run the container with the certs mounted:
 
 ```bash
-docker run -p 80:80 -p 443:443 -v "$(pwd)/certificates:/etc/nginx/ssl:ro" frontend-nginx
+docker run -p 80:80 -p 443:443 -v "$(pwd)/certs:/etc/nginx/ssl:ro" frontend-nginx
 ```
 
 ### Option B: Use your own certificate and key
 
 1. Put your certificate (full chain) in a file named **`fullchain.pem`**.
 2. Put your private key in a file named **`privkey.pem`**.
-3. Put both files in the **`certificates/`** folder (or any folder you want to use).
+3. Put both files in the **`certs/`** folder (or any folder you want to use).
 4. Run Docker with that folder mounted:
 
    ```bash
-   docker run -p 80:80 -p 443:443 -v "/path/to/your/certificates:/etc/nginx/ssl:ro" frontend-nginx
+   docker run -p 80:80 -p 443:443 -v "/path/to/your/certs:/etc/nginx/ssl:ro" frontend-nginx
    ```
 
 If the names from your CA are different (e.g. `cert.pem` and `key.pem`), copy or rename them to `fullchain.pem` and `privkey.pem` in that folder.

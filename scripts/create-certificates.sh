@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CERT_DIR="${SCRIPT_DIR}/../certificates"
+CERT_DIR="${SCRIPT_DIR}/../certs"
 
 mkdir -p "$CERT_DIR"
 
