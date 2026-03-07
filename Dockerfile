@@ -2,24 +2,17 @@ FROM nginx:1.29.1-alpine
 
 WORKDIR /frontend-nginx
 
-# Step 1: Remove default nginx configuration
+# Remove default nginx config and use SSL config only
 RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx-ssl.conf /etc/nginx/conf.d/default.conf
 
-# Step 2: Copy nginx configurations (default = HTTP; entrypoint switches to SSL when certs exist)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY nginx-ssl.conf /etc/nginx/conf.d/nginx-ssl.conf
-
-# Step 3: Entrypoint enables HTTPS automatically when certs are mounted
-COPY scripts/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Step 4: Copy dist files
+# Copy dist files
 COPY dist /usr/share/nginx/html/
 
 EXPOSE 80 443
 
-# Health check
+# Health check (HTTPS; -k allows self-signed certs when mounted)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/health || exit 1
+    CMD curl -f -k https://localhost/health || exit 1
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

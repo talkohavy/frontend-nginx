@@ -21,33 +21,27 @@ docker build -t frontend-nginx .
 
 ### Step 3: Run the container
 
-**Without HTTPS (just HTTP):**
-
-```bash
-docker run -p 80:80 frontend-nginx
-```
-
-**With HTTPS (see section 3 first to create certificates):**
+The image uses HTTPS only. Mount your certificates (see section 3 first to create them):
 
 ```bash
 docker run -p 80:80 -p 443:443 -v "$(pwd)/certs:/etc/nginx/ssl:ro" frontend-nginx
 ```
 
-- **HTTP:** open [http://localhost](http://localhost)
-- **HTTPS (when certs are mounted):** open [https://localhost](https://localhost) (your browser will warn about the certificate if it’s self-signed—that’s normal for local/dev).
+- **HTTP** (port 80) redirects to HTTPS.
+- **HTTPS:** open [https://localhost](https://localhost) (your browser will warn about the certificate if it’s self-signed—that’s normal for local/dev).
 
 ---
 
 ## 2. How to check it started properly
 
 1. **Health check in the browser**  
-   Open: [http://localhost/health](http://localhost/health)  
+   Open: [https://localhost/health](https://localhost/health)  
    You should see the word: **healthy**
 
 2. **Health check in the terminal**
 
    ```bash
-   curl http://localhost/health
+   curl -k https://localhost/health
    ```
 
    You should see: **healthy**

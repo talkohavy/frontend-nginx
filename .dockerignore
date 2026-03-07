@@ -29,6 +29,5 @@ README.md
 
 # Only include what's needed for production
 !dist/
-!nginx.conf
-!scripts/
+!nginx-ssl.conf
 !Dockerfile
