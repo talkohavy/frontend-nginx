@@ -6,12 +6,34 @@ A simple server that hosts your frontend files and can do HTTPS with certificate
 
 ## 1. How to start the project
 
-### Step 1: Put your website in `dist/`
+### Step 1: Paste the `dist` of your frontend at the root of this project
 
-Place your built website (e.g. `index.html` and your JS/CSS/images) inside the **`dist/`** folder.  
-If `dist/` is empty or missing, the Docker build will still run, but you’ll have nothing to serve.
+If `dist` is missing, Docker build will fail ❌.  
+If `dist` is empty, Docker build will run, but you'll have no frontend to serve.
 
-### Step 2: Build the Docker image
+### Step 2: Update hostname
+
+Defaults to `luckylove.co.il`.  
+Update files:
+
+- `nginx-ssl.conf`
+- `create-certificate.sh`
+
+Replace value `luckylove.co.il` with the desired hostname.
+
+In case you updated `create-certificate.sh`, you'll need to run:
+
+```bash
+npm run create-cert
+```
+
+### Step 3: Update the target PORT of your backend
+
+Backend's port defaults to 8000.  
+This translates to `http://localhost:8000`.  
+Replace port `8000` with the port of your backend server.
+
+### Step 4: Build the Docker image
 
 In the project folder, run:
 
@@ -19,7 +41,7 @@ In the project folder, run:
 docker build -t frontend-nginx .
 ```
 
-### Step 3: Run the container
+### Step 5: Run the container
 
 The image uses HTTPS only. Mount your certificates (see section 3 first to create them):
 
